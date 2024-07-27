@@ -18,5 +18,11 @@
 
 @layer components
 {
-  
+  .input-box{
+    @apply w-full border-[1.5px] bg-transparent text-sm mb-4 px-5 py-3 outline-none;
+  }
+
+  .btn-primary{
+    @apply w-full bg-primary hover:bg-blue-600 p-2 rounded text-white text-sm my-1
+  }
 }
