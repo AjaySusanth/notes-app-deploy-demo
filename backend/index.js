@@ -71,6 +71,42 @@ app.post('/create-account',async (req,res)=>{
     return res.json({error:false,user,accessToken,message:"Registered Successfully"})
 })
 
+// Login
+
+app.post('/login',async (req,res)=>{
+    const {email,password} = req.body
+    
+    if(!email) {
+        return res.status(400).json({error:true,message:"Email is required"})
+    }
+
+    if(!password) {
+        return res.status(400).json({error:true,message:"Password is required"})
+    }
+
+    const userInfo = await User.findOne({email:email})
+
+    if(!userInfo){
+        return res.status(400).json({message:'User not found'})
+    }
+
+    if(userInfo.email == email && userInfo.password == password){
+        const user = {user:userInfo}
+        const accessToken = jwt.sign(user,process.env.ACCESS_TOKEN,{
+            expiresIn:"3600m"
+        })
+        return res.json({
+            error:false,
+            message:"Login successful",
+            email,
+            accessToken
+        })
+    }
+
+    else{
+        return res.status(400).json({error:true,message:'Invalid Credentials'})
+    }
+})
 
 
 app.listen(8000)
