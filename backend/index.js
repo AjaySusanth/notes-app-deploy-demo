@@ -232,10 +232,6 @@ app.put('/note-pinned/:id',authenticateToken,async(req,res)=>{
     const {user} = req.user
     const {isPinned} = req.body
 
-    if (!isPinned){
-        return res.status(400).json({error:true,message:'No changes provided'})
-    }
-
     try{
         const note = await Note.findOne({_id:noteId,userId:user._id})
 
@@ -258,6 +254,8 @@ app.put('/note-pinned/:id',authenticateToken,async(req,res)=>{
         })
     }
 })
+
+
 
 app.listen(8000)
 
