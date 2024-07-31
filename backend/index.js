@@ -226,6 +226,39 @@ app.delete('/delete-note/:id',authenticateToken,async(req,res)=>{
     
 })
 
+// Update isPinned
+app.put('/note-pinned/:id',authenticateToken,async(req,res)=>{
+    const noteId = req.params.id
+    const {user} = req.user
+    const {isPinned} = req.body
+
+    if (!isPinned){
+        return res.status(400).json({error:true,message:'No changes provided'})
+    }
+
+    try{
+        const note = await Note.findOne({_id:noteId,userId:user._id})
+
+        if(!note){
+            return res.status(404).json({error:true,message:'Note not found'})
+        }
+
+        note.isPinned = isPinned
+        await note.save()
+        return res.json({
+            error:false,
+            note,
+            message:'Note edited successfully'
+        })
+    }
+    catch(err){
+        res.status(500).json({
+            error:true,
+            message:"Internal Server error"
+        })
+    }
+})
+
 app.listen(8000)
 
 module.exports = app
