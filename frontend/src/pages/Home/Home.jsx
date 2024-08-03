@@ -15,6 +15,15 @@ const Home = () => {
     data:null
   })
 
+
+  const handleEdit = async(noteDetails) => {
+    setOpenModal({
+      isShown:true,
+      type:'edit',
+      data:noteDetails
+    })
+  }
+
   const [userInfo,setUserInfo] = useState(null)
   const navigate = useNavigate()
 
@@ -38,6 +47,7 @@ const Home = () => {
   
   const [allNotes,setAllNotes] = useState([])
 
+    // get all notes api call
   const getAllNotes = async()=>{
     try{
       const res = await axiosInstance.get('/get-all-notes')
@@ -72,7 +82,7 @@ const Home = () => {
               content={item.content}
               tags={item.tags}
               isPinned={item.isPinned}
-              onEdit={()=>{}}
+              onEdit={()=> handleEdit(item)}
               onDelete={()=>{}}
               onPinNote={()=>{}}
               />
@@ -102,10 +112,12 @@ const Home = () => {
       >
         <AddEditNotes 
         type={openModal.type}
-        data={openModal.data}
+        noteData={openModal.data}
         onClose={()=>{
           setOpenModal({isShown:false, type:"add",data:null})
-        }}/> 
+        }}
+        getAllNotes={getAllNotes}
+        /> 
       </Modal>
 
     </>

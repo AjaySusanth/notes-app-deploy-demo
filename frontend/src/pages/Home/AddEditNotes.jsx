@@ -1,20 +1,65 @@
 import { useState } from "react"
 import TagInput from "../../components/TagInput"
 import { MdClose } from "react-icons/md"
+import axiosInstance from "../../utils/axiosInstance"
 
-const AddEditNotes = ({onClose,noteData,type}) => {
+const AddEditNotes = ({onClose,noteData,type,getAllNotes}) => {
 
-    const [title,setTitle] = useState('')
-    const [content,setContent] = useState('')
-    const [tags,setTags] = useState([])
+    const [title,setTitle] = useState(noteData?.title || '')
+    const [content,setContent] = useState(noteData?.content || '')
+    const [tags,setTags] = useState(noteData?.tags || [])
     const [error,setError] = useState(null)
 
     //Add note
 
-    const addNewNote = async() =>{}
+    const addNewNote = async() =>{
+        try{
+            const res = await axiosInstance.post('/add-note',{
+                title,
+                content,
+                tags
+            })
+
+            if (res.data && res.data.note){
+                getAllNotes()
+                onClose()
+            }
+            
+        }
+        catch(err){
+            if (err.response && err.response.data && err.response.data.message){
+                setError(err.response.data.message)
+            }
+            else{
+                setError('Internal Server Error')
+            }
+        }
+    }
 
     //Edit Note
-    const editNote = async() =>{}
+    const editNote = async() =>{
+        const noteId = noteData._id
+        try{
+            const res = await axiosInstance.put('/edit-note/'+ noteId,{
+                title,content,tags
+            })
+
+            if (res.data && res.data.note){
+                getAllNotes()
+                onClose()
+            }
+
+        }
+        catch(err){
+            if (err.response && err.response.data && err.response.data.message){
+                setError(err.response.data.message)
+            }
+            else{
+                setError('Internal Server Error')
+                console.log(err)
+            }
+        }
+    }
 
 
     const handleAddNote = () => {
@@ -78,7 +123,7 @@ const AddEditNotes = ({onClose,noteData,type}) => {
         )}
 
         <button className="btn-primary font-medium mt-5 p-3" onClick={handleAddNote}>
-            Add
+            {type ==='edit' ? 'UPDATE' : 'ADD'}
         </button>
     </div>
   )
