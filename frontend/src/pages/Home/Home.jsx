@@ -6,6 +6,7 @@ import Modal from 'react-modal'
 import { useEffect, useState } from 'react'
 import axiosInstance from '../../utils/axiosInstance'
 import { useNavigate } from 'react-router-dom'
+import ToastMsg from '../../components/ToastMsg'
 
 const Home = () => {
 
@@ -68,6 +69,28 @@ const Home = () => {
   },[])
 
 
+  const [showToastMsg,setShowToastMsg] = useState({
+    isShown:false,
+    message:"",
+    type:"add"
+  })
+
+  const showToastMessage = (message,type)=>{
+    setShowToastMsg({
+      isShown:true,
+      message,
+      type
+    })
+  }
+
+  const handleCloseToast = ()=>{
+    setShowToastMsg({
+      isShown:false,
+      message:""
+    })
+  }
+
+
   return (
     <>
       <Navbar userInfo={userInfo}/>
@@ -117,8 +140,16 @@ const Home = () => {
           setOpenModal({isShown:false, type:"add",data:null})
         }}
         getAllNotes={getAllNotes}
+        showToast={showToastMessage}
         /> 
       </Modal>
+
+      <ToastMsg
+      isShown={showToastMsg.isShown}
+      message={showToastMsg.message}
+      type={showToastMsg.type}
+      onClose={handleCloseToast}      
+      />
 
     </>
   )
