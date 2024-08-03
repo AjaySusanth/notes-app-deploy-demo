@@ -6,9 +6,8 @@ import Modal from 'react-modal'
 import { useEffect, useState } from 'react'
 import axiosInstance from '../../utils/axiosInstance'
 import { useNavigate } from 'react-router-dom'
-const Home = () => {
 
- 
+const Home = () => {
 
   const [openModal,setOpenModal] = useState({
     isShown:false,
@@ -18,7 +17,6 @@ const Home = () => {
 
   const [userInfo,setUserInfo] = useState(null)
   const navigate = useNavigate()
-
 
   // get user api call
 
@@ -37,8 +35,24 @@ const Home = () => {
       }
     }
   }
+  
+  const [allNotes,setAllNotes] = useState([])
+
+  const getAllNotes = async()=>{
+    try{
+      const res = await axiosInstance.get('/get-all-notes')
+
+      if (res.data && res.data.notes){
+        setAllNotes(res.data.notes)
+      }
+    }
+    catch(err){
+      console.log('An unexpected error occured')
+    }
+  }
 
   useEffect(()=>{
+    getAllNotes()
     getUserInfo();
     return ()=>{}
   },[])
@@ -49,16 +63,21 @@ const Home = () => {
       <Navbar userInfo={userInfo}/>
       <div className="container mx-auto">
         <div className="grid grid-cols-3 gap-4 mt-8">
-          <NoteCard
-            title='Hello'
-            date='31 Apr 2024'
-            content='Hii hello , how u doin'
-            tag='#greeting'
-            isPinned={true}
-            onEdit={()=>{}}
-            onDelete={()=>{}}
-            onPinNote={()=>{}}
-            />
+
+          {allNotes.map((item,index)=>(
+              <NoteCard
+              key={item._id}
+              title={item.title}
+              date={item.createdOn}
+              content={item.content}
+              tags={item.tags}
+              isPinned={item.isPinned}
+              onEdit={()=>{}}
+              onDelete={()=>{}}
+              onPinNote={()=>{}}
+              />
+          ))}
+          
         </div>
       </div>
       
