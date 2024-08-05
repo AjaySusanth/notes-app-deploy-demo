@@ -6,7 +6,7 @@ const axiosInstance = axios.create({
     
     baseURL:BASE_URL,
 
-    timeout:1000, 
+    timeout:5000, 
     //This property sets a timeout of 1000 milliseconds (1 second) for requests made using this Axios instance. If a request takes longer than 1 second, it will be aborted.
     headers:{
         "Content-Type":"application/json",
