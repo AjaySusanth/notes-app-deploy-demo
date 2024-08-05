@@ -10,6 +10,7 @@ import ToastMsg from '../../components/ToastMsg'
 import EmptyCard from '../../components/EmptyCard'
 import addNotesImg from '../../assets/add-note.svg'
 import noNotesImg from '../../assets/no-notes.svg'
+import Loader from '../../components/Loader'
 
 const Home = () => {
 
@@ -50,6 +51,7 @@ const Home = () => {
   }
   
   const [allNotes,setAllNotes] = useState([])
+  const [loading, setLoading] = useState(true); // Loading state
 
     // get all notes api call
   const getAllNotes = async()=>{
@@ -62,6 +64,8 @@ const Home = () => {
     }
     catch(err){
       console.log('An unexpected error occured')
+    } finally{
+      setLoading(false);
     }
   }
 
@@ -153,6 +157,9 @@ const Home = () => {
     })
   }
 
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <>
