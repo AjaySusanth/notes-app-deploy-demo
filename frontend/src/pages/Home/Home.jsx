@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom'
 import ToastMsg from '../../components/ToastMsg'
 import EmptyCard from '../../components/EmptyCard'
 import addNotesImg from '../../assets/add-note.svg'
+import noNotesImg from '../../assets/no-notes.svg'
 
 const Home = () => {
 
@@ -84,6 +85,31 @@ const Home = () => {
     }
   }
 
+  // search api
+
+  const [isSearch,setIsSearch] = useState(false)
+
+  const onSearch = async (query) =>{
+    try{
+      const res = await axiosInstance('/search-notes',{
+        params:{query} //short hand for params:{query:query}
+      })
+
+      if(res.data && res.data.notes){
+        setIsSearch(true)
+        setAllNotes(res.data.notes)
+      }
+    }
+    catch(err){
+      console.log(err)
+    }
+  }
+
+  const handleClearSearch = () =>{
+    setIsSearch(false)
+    getAllNotes()
+  }
+
   useEffect(()=>{
     getAllNotes()
     getUserInfo();
@@ -115,7 +141,7 @@ const Home = () => {
 
   return (
     <>
-      <Navbar userInfo={userInfo}/>
+      <Navbar userInfo={userInfo} onSearch={onSearch} handleClearSearch={handleClearSearch}/>
       <div className="container mx-auto">
         {allNotes.length>0 ?
         (
@@ -137,7 +163,7 @@ const Home = () => {
           
           </div>
         )
-          : (<EmptyCard img={addNotesImg} message={'Add your First Note by clicking the add button. Lets get started'}/>)
+          : (<EmptyCard img={isSearch ? noNotesImg : addNotesImg} message={isSearch ? 'No notes were found matching your search':'Add your First Note by clicking the add button. Lets get started'}/>)
         }
         
       </div>

@@ -3,7 +3,7 @@ import {useNavigate} from 'react-router-dom'
 import SearchBar from "./SearchBar";
 import { useState } from "react";
 
-const Navbar = ({userInfo}) => {
+const Navbar = ({userInfo,onSearch,handleClearSearch}) => {
 
   const [searchQuery,setSearchQuery] = useState('')
 
@@ -14,11 +14,14 @@ const Navbar = ({userInfo}) => {
   }
 
   const handleSearch =() => {
-
+    if(searchQuery){
+      onSearch(searchQuery)
+    }
   }
 
   const onClearSearch = () => {
     setSearchQuery("")
+    handleClearSearch()
   }
     return (
       <div className="flex items-center justify-between px-6 py-2 bg-white drop-shadow">
