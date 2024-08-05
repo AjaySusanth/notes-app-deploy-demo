@@ -1,7 +1,5 @@
 require("dotenv").config()
 
-const config = require("./config.json")
-
 const express = require('express')
 const cors = require('cors')
 const mongoose = require('mongoose')
@@ -19,7 +17,7 @@ app.use(
     })
 )
 
-mongoose.connect(config.connectionString)
+mongoose.connect(process.env.mongodbURL)
 .then(()=>{
     console.log('Connected to db')
 })
