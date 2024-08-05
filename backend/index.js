@@ -8,6 +8,7 @@ const jwt = require('jsonwebtoken')
 const {authenticateToken} = require('./utilities')
 
 const app = express()
+const port = process.env.PORT || 8000
 
 app.use(express.json())
 
@@ -307,6 +308,6 @@ app.get('/search-notes',authenticateToken,async(req,res)=>{
 
 })
 
-app.listen(8000)
+app.listen(port)
 
 module.exports = app
