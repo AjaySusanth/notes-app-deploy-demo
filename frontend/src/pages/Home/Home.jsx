@@ -7,6 +7,8 @@ import { useEffect, useState } from 'react'
 import axiosInstance from '../../utils/axiosInstance'
 import { useNavigate } from 'react-router-dom'
 import ToastMsg from '../../components/ToastMsg'
+import EmptyCard from '../../components/EmptyCard'
+import addNotesImg from '../../assets/add-note.svg'
 
 const Home = () => {
 
@@ -115,7 +117,9 @@ const Home = () => {
     <>
       <Navbar userInfo={userInfo}/>
       <div className="container mx-auto">
-        <div className="grid grid-cols-3 gap-4 mt-8">
+        {allNotes.length>0 ?
+        (
+          <div className="grid grid-cols-3 gap-4 mt-8">
 
           {allNotes.map((item,index)=>(
               <NoteCard
@@ -131,7 +135,11 @@ const Home = () => {
               />
           ))}
           
-        </div>
+          </div>
+        )
+          : (<EmptyCard img={addNotesImg} message={'Add your First Note by clicking the add button. Lets get started'}/>)
+        }
+        
       </div>
       
 
