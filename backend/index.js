@@ -277,7 +277,37 @@ app.put('/note-pinned/:id',authenticateToken,async(req,res)=>{
     }
 })
 
+// Search api
+app.get('/search-notes',authenticateToken,async(req,res)=>{
+    const {user} = req.user;
+    const {query} = req.query
 
+    if(!query){
+        return res.status(400).json({error:true, message:"Please enter a search term"})
+    }
+
+    try{
+        const notes = await Note.find({
+            userId:user._id,
+            $or:[
+                {title:{$regex: new RegExp(query,'i')}},
+                {content:{$regex: new RegExp(query,'i')}},
+            ]
+        })
+
+        return res.json({
+            error:false,
+            notes,
+            message:"Search result retrieved successfully"
+        })
+    }
+    catch(err){
+        res.status(500).json({error:true,message:"Internal server error"})
+        console.log(err)
+    }
+
+
+})
 
 app.listen(8000)
 
