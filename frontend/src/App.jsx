@@ -1,7 +1,7 @@
 import Home from "./pages/Home/Home"
 import Login from "./pages/Login/Login"
 import SignUp from "./pages/SignUp/SignUp"
-import { BrowserRouter as Router,Routes,Route } from "react-router-dom"
+import { BrowserRouter as Router,Routes,Route,Navigate } from "react-router-dom"
 
 
 const routes = (
@@ -10,6 +10,7 @@ const routes = (
       <Route path='/dashboard' exact element={<Home/>}/>
       <Route path='/signup' exact element={<SignUp/>}/>
       <Route path='/login' exact element={<Login/>}/>
+      <Route path="/" element={<Navigate to="/signup" replace />} />
     </Routes>
 </Router>
 )
